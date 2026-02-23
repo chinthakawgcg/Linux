@@ -1,0 +1,26 @@
+1. Purge Binary Logs via MySQL
+
+-- Purge logs older than 3 days
+PURGE BINARY LOGS BEFORE NOW() - INTERVAL 3 DAY;
+
+-- OR purge everything except the latest log
+PURGE BINARY LOGS TO 'binlog.001154';
+
+
+1. Update the Configuration
+In your MySQL configuration file (likely /etc/mysql/mysql.conf.d/mysqld.cnf), update the setting:
+
+[mysqld]
+binlog_expire_logs_seconds = 604800
+
+2. Apply the Change Immediately
+You can apply this to the running server without a restart by logging into the MySQL shell:
+
+SQL
+SET GLOBAL binlog_expire_logs_seconds = 604800;
+
+3. Cleanup Existing Logs
+The setting above only affects future logs or triggers when a new log is created.
+
+SQL
+PURGE BINARY LOGS BEFORE NOW() - INTERVAL 7 DAY;
