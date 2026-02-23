@@ -1,0 +1,37 @@
+1. Hard Block via Firewall
+
+sudo ufw deny from 203.161.43.136
+
+2. Configure Fail2Ban to catch "Flood" traffic
+To prevent future IPs from doing this, you need a specific "DDOS" jail.
+
+A. Create a new filter:
+sudo nano /etc/fail2ban/filter.d/nginx-flood.conf
+
+[Definition]
+failregex = ^<HOST> -.*"(GET|POST|HEAD).*$
+ignoreregex = 
+
+B. Enable the Jail:
+sudo nano /etc/fail2ban/jail.local
+
+[nginx-flood]
+enabled = true
+port    = http,https
+filter  = nginx-flood
+logpath = /var/log/nginx/access.log
+findtime = 60
+bantime  = 86400
+maxretry = 300
+
+This will ban any IP hitting your server more than 300 times in one minute for a full day.
+
+3. Check what it's hitting
+To see exactly what that IP was trying to do, run this:
+
+grep "<Suspected IP address>" /var/log/nginx/access.log | head -n 20
+
+4. Verify the Ban
+After running the UFW command, check your Nginx logs again:
+
+tail -f /var/log/nginx/access.log
