@@ -26,12 +26,17 @@ maxretry = 300
 
 This will ban any IP hitting your server more than 300 times in one minute for a full day.
 
-3. Check what it's hitting
+3. Restart to be 100% Sure
+
+sudo systemctl restart fail2ban
+
+
+4. Check what it's hitting
 To see exactly what that IP was trying to do, run this:
 
 grep "<Suspected IP address>" /var/log/nginx/access.log | head -n 20
 
-4. Verify the Ban
+5. Verify the Ban
 After running the UFW command, check your Nginx logs again:
 
 tail -f /var/log/nginx/access.log
