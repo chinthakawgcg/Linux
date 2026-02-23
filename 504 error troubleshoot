@@ -1,0 +1,12 @@
+1. Check the Error Logs
+Nginx Logs: tail -f /var/log/nginx/error.log
+PHP-FPM Logs: tail -f /var/log/php[version]-fpm.log (Replace [version] with yours, e.g., 8.2).
+Laravel Logs: tail -f storage/logs/laravel.log
+
+02. To see the top 10 most frequent visitor IPs in your log right now, run:
+
+awk '{print $1}' /var/log/nginx/access.log | sort | uniq -c | sort -nr | head -n 10
+
+03. To see exactly how much memory your PHP-FPM processes are consuming and confirm the new limits are safe, run this command in your terminal:
+
+ps -ylC php-fpm8.3 --sort:rss
