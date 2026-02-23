@@ -35,3 +35,13 @@ grep "<Suspected IP address>" /var/log/nginx/access.log | head -n 20
 After running the UFW command, check your Nginx logs again:
 
 tail -f /var/log/nginx/access.log
+
+
+Check Fail2Ban
+Even if there are no "global" banned IPs, your specific IP might be in the nginx-flood jail. Check it specifically:
+
+sudo fail2ban-client status nginx-flood
+
+If you see your IP in the "Banned IP list," unban it:
+
+sudo fail2ban-client set nginx-flood unbanip YOUR_PUBLIC_IP
